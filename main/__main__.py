@@ -16,6 +16,7 @@ except:
 
 # Now safe to import everything that uses pyrogram
 from main.modules.parser import auto_parser
+from main.modules.schedule import update_schedule  # ✅ added
 from main import app
 from pyrogram import filters, idle
 from pyrogram.types import Message
@@ -37,6 +38,9 @@ async def start_bot():
 
     print("[INFO]: AutoAnimeBot Started Bot Successfully")
     print("==========JOIN @sourcepleaseindex==========")
+
+    print("[INFO]: Updating schedule message")
+    await update_schedule()  # ✅ this was missing
 
     print("[INFO]: Adding Parsing Task")
     asyncio.create_task(auto_parser())
