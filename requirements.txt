@@ -12,4 +12,5 @@ motor
 dnspython
 opencv-python-headless
 flask==2.0.1
+werkzeug==2.0.3
 gunicorn==21.0.0
