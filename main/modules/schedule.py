@@ -5,23 +5,23 @@ from main.inline import button2
 from pyrogram.types import Message
 from config import STATUS_ID, UPLOADS_ID, SCHEDULE_ID, UPLOADS_USERNAME
 
-schedule = app.get_messages(UPLOADS_ID,SCHEDULE_ID)
-schedule: Message
+# Remove this global call:
+# schedule = app.get_messages(UPLOADS_ID, SCHEDULE_ID)
 
 def change_tz(gmt):
-    i,y = gmt.split(":")
+    i, y = gmt.split(":")
     i = int(i)
     y = int(y)
 
     time = (i * 60) + y
     time = time + 330
 
-    i = math.floor(time/60)
-    y = time-(i*60)
+    i = math.floor(time / 60)
+    y = time - (i * 60)
     if y == 0:
         y = "00"
 
-    return i,y
+    return i, y
 
 def get_scheduled_animes():
     url = 'https://subsplease.org/api/?f=schedule&h=true&tz=$'
@@ -37,11 +37,11 @@ def get_scheduled_animes():
         hh, mm = change_tz(t)
 
         if int(hh) < 24:
-            x['time'] =  str(hh) + ":" + str(mm)
+            x['time'] = str(hh) + ":" + str(mm)
             animes.append(x)
 
     return animes
-            
+
 async def update_schedule():
     animes = get_scheduled_animes()
     text = "<b>📆 Today's Schedule</b> \n\n"
@@ -54,8 +54,9 @@ async def update_schedule():
         )
 
     text += "\n<b>⏰ Current TimeZone :</b> <code>IST (UTC +5:30)</code>"
-    
+
     try:
-        await schedule.edit(text,reply_markup=button2,parse_mode="html")
-    except:
-        return
+        schedule: Message = await app.get_messages(UPLOADS_ID, SCHEDULE_ID)
+        await schedule.edit(text, reply_markup=button2, parse_mode="html")
+    except Exception as e:
+        print(f"[ERROR] Failed to update schedule: {e}")
