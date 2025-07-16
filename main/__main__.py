@@ -5,8 +5,8 @@ from uvloop import install
 from contextlib import closing, suppress
 
 # 🕒 Time sync fix before Telegram connection
-print("⏳ Waiting 10 seconds to sync time with Telegram...")
-time.sleep(10)
+print("⏳ Waiting 30 seconds to sync time with Telegram...")
+time.sleep(30)
 os.environ['TZ'] = 'UTC'
 try:
     import time as tm
