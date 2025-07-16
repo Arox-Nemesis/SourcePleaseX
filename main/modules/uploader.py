@@ -1,21 +1,19 @@
 import asyncio
 from main.modules.utils import format_time, get_duration, get_epnum, get_filesize, status_text, tags_generator
-from main.modules.anilist import get_anime_name
-from main.modules.anilist import get_anime_img
+from main.modules.anilist import get_anime_name, get_anime_img
 from main.modules.thumbnail import generate_thumbnail
-from config import UPLOADS_ID
+from config import UPLOADS_ID, STATUS_ID
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from main.modules.progress import progress_for_pyrogram
 from os.path import isfile
 import os
 import time
-from main import app, status
+from main import app
 from pyrogram.errors import FloodWait
 from main.inline import button1
 
-async def upload_video(msg: Message,file,id,tit,name,ttl):
+async def upload_video(msg: Message, file, id, tit, name, ttl):
     try:
-    
         fuk = isfile(file)
         if fuk:
             r = msg
@@ -23,7 +21,7 @@ async def upload_video(msg: Message,file,id,tit,name,ttl):
             duration = get_duration(file)
             size = get_filesize(file)
             ep_num = get_epnum(name)
-            thumbnail,w,h = await generate_thumbnail(id,file,tit,ep_num,size,format_time(duration))
+            thumbnail, w, h = await generate_thumbnail(id, file, tit, ep_num, size, format_time(duration))
             tags = tags_generator(tit)
             buttons = InlineKeyboardMarkup([
                 [
@@ -34,33 +32,36 @@ async def upload_video(msg: Message,file,id,tit,name,ttl):
             caption = f"🎥 **{name}**\n\n{tags}"
             x = await app.send_video(
                 UPLOADS_ID,
-            file,
-            caption=caption,
-            duration=duration,
-            width=w,
-            height=h,
-            thumb=thumbnail,
-            reply_markup=buttons,
-            file_name=os.path.basename(file),
-            progress=progress_for_pyrogram,
-            progress_args=(
-                os.path.basename(file),
-                r,
-                c_time,
-                ttl
+                file,
+                caption=caption,
+                duration=duration,
+                width=w,
+                height=h,
+                thumb=thumbnail,
+                reply_markup=buttons,
+                file_name=os.path.basename(file),
+                progress=progress_for_pyrogram,
+                progress_args=(
+                    os.path.basename(file),
+                    r,
+                    c_time,
+                    ttl
+                )
             )
-            )        
         try:
             await r.delete()
             os.remove(file)
             os.remove(thumbnail)
         except:
             pass
+
     except FloodWait as e:
         flood_time = int(e.x) + 5
         try:
-            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"),reply_markup=button1)
+            status = await app.get_messages(UPLOADS_ID, STATUS_ID)
+            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"), reply_markup=button1)
         except:
             pass
         await asyncio.sleep(flood_time)
+
     return x.message_id
