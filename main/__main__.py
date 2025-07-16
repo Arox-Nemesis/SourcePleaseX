@@ -1,3 +1,7 @@
+import time  # <-- add this
+print("⏳ Waiting 5 seconds for time sync...")
+time.sleep(5)  # <-- add this line
+
 import asyncio
 from main.modules.parser import auto_parser
 from main import app
