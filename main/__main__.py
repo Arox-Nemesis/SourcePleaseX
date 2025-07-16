@@ -1,7 +1,16 @@
-import time  # <-- add this
-print("⏳ Waiting 5 seconds for time sync...")
-time.sleep(5)  # <-- add this line
+import time
+import os
 
+print("⏳ Waiting 10 seconds to sync server time with Telegram...")
+time.sleep(10)
+
+# Force UTC timezone
+os.environ['TZ'] = 'UTC'
+try:
+    time.tzset()
+except:
+    pass
+  
 import asyncio
 from main.modules.parser import auto_parser
 from main import app
