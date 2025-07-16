@@ -1,22 +1,8 @@
-import time
-import os
-
-# 🔧 Delay for time sync (must be before Pyrogram starts)
-print("⏳ Waiting 10 seconds to sync time...")
-time.sleep(10)
-
-# Optional: Force UTC timezone
-os.environ['TZ'] = 'UTC'
-try:
-    time.tzset()
-except:
-    pass
-
 from pyrogram import Client
 from config import *
 import libtorrent as lt
 
-# ✅ Initialize Client
+# ✅ Initialize Pyrogram Client
 app = Client(
     "bot",
     api_id=API_ID,
@@ -24,14 +10,13 @@ app = Client(
     bot_token=BOT_TOKEN
 )
 
-# ✅ Start Pyrogram after time is stable
-app.start()
-
-print("[INFO]: STARTING Lib Torrent CLIENT")
+# ✅ Libtorrent session setup (but don't use Telegram yet)
+print("[INFO]: LibTorrent Session Initializing")
 ses = lt.session()
 ses.listen_on(6881, 6891)
 
+# ✅ Initialize your global queue
 queue = []
 
-# ✅ Telegram API call happens only after time + client is ready
-status = app.get_messages(UPLOADS_ID, STATUS_ID)
+# ❌ DO NOT call app.start() or get_messages() here
+# These must be done AFTER app.start() in main.py
