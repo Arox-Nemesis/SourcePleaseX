@@ -35,6 +35,10 @@ async def start_bot():
     print("==================================")
     print("[INFO]: Starting Pyrogram Bot Client")
     await app.start()
+    from config import UPLOADS_ID, STATUS_ID
+import main
+main.status = await app.get_messages(UPLOADS_ID, STATUS_ID)
+
 
     print("[INFO]: AutoAnimeBot Started Bot Successfully")
     print("==========JOIN @sourcepleaseindex==========")
