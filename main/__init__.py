@@ -16,7 +16,8 @@ ses = lt.session()
 ses.listen_on(6881, 6891)
 
 # ✅ Initialize your global queue
-queue = []
+from pyrogram.types import Message
 
-# ❌ DO NOT call app.start() or get_messages() here
-# These must be done AFTER app.start() in main.py
+# These will be used as globals
+status: Message = None
+queue = []
