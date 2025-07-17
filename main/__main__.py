@@ -14,7 +14,7 @@ try:
 except:
     pass
 
-# Now safe to import everything that uses pyrogram
+# Safe to import after time sync
 from main.modules.parser import auto_parser
 from main.modules.schedule import update_schedule
 from main import app
@@ -64,3 +64,4 @@ if __name__ == "__main__":
         with suppress(asyncio.exceptions.CancelledError):
             loop.run_until_complete(start_bot())
             loop.run_until_complete(asyncio.sleep(3.0))
+            
