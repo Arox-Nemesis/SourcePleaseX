@@ -16,7 +16,7 @@ except:
 
 # Now safe to import everything that uses pyrogram
 from main.modules.parser import auto_parser
-from main.modules.schedule import update_schedule  # ✅ added
+from main.modules.schedule import update_schedule
 from main import app
 from pyrogram import filters, idle
 from pyrogram.types import Message
@@ -35,6 +35,7 @@ async def start_bot():
     print("==================================")
     print("[INFO]: Starting Pyrogram Bot Client")
     await app.start()
+
     from config import UPLOADS_ID, STATUS_ID
     import main
     main.status = await app.get_messages(UPLOADS_ID, STATUS_ID)
@@ -43,7 +44,7 @@ async def start_bot():
     print("==========JOIN @sourcepleaseindex==========")
 
     print("[INFO]: Updating schedule message")
-    await update_schedule()  # ✅ this was missing
+    await update_schedule()
 
     print("[INFO]: Adding Parsing Task")
     asyncio.create_task(auto_parser())
